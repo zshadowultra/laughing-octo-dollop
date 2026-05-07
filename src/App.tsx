@@ -33,7 +33,7 @@ export default function App() {
   const [apiToken, setApiToken] = useState('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');
   const [selectedModel, setSelectedModel] = useState('nvidia/llama-3.1-405b-instruct');
 
-  const { sendMessage } = useChat();
+  const { sendMessage, isStreaming } = useChat();
 
   // Initialize theme
   useEffect(() => {
@@ -79,6 +79,17 @@ export default function App() {
     };
     setChats(prev => [newChat, ...prev]);
     setActiveChatId(newChat.id);
+  };
+
+  const deleteChat = (id: string) => {
+    setChats(prev => prev.filter(c => c.id !== id));
+    if (activeChatId === id) {
+      setActiveChatId(null);
+    }
+  };
+
+  const renameChat = (id: string, newTitle: string) => {
+    setChats(prev => prev.map(c => c.id === id ? { ...c, title: newTitle } : c));
   };
 
   const handleSendMessage = useCallback(async (content: string) => {
@@ -155,6 +166,8 @@ export default function App() {
         activeChatId={activeChatId}
         setActiveChatId={setActiveChatId}
         onCreateChat={createNewChat}
+        onDeleteChat={deleteChat}
+        onRenameChat={renameChat}
         onOpenSettings={() => setIsSettingsOpen(true)}
       />
       
@@ -172,8 +185,8 @@ export default function App() {
         <ChatArea chat={activeChat} />
         
         <InputSection 
-          activeChatId={activeChatId}
           onSendMessage={handleSendMessage}
+          isStreaming={isStreaming}
         />
       </main>
 

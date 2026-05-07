@@ -11,6 +11,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@capacitor/android": "^8.3.1",
+    "@capacitor/cli": "^8.3.1",
+    "@capacitor/core": "^8.3.1",
     "@phosphor-icons/react": "^2.1.10",
     "animejs": "^4.4.1",
     "axios-mock-adapter": "^2.1.0",

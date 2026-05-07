@@ -6,17 +6,18 @@ import {
   Globe, 
   Sparkle, 
   Books,
-  X
+  X,
+  ArrowsCounterClockwise
 } from '@phosphor-icons/react';
 import { cn } from '../../lib/utils';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface InputSectionProps {
-  activeChatId: string | null;
   onSendMessage: (content: string) => void;
+  isStreaming: boolean;
 }
 
-export function InputSection({ onSendMessage }: InputSectionProps) {
+export function InputSection({ onSendMessage, isStreaming }: InputSectionProps) {
   const [input, setInput] = useState('');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeTools, setActiveTools] = useState<string[]>([]);
@@ -24,7 +25,7 @@ export function InputSection({ onSendMessage }: InputSectionProps) {
 
   const handleSubmit = (e?: React.FormEvent) => {
     e?.preventDefault();
-    if (!input.trim()) return;
+    if (!input.trim() || isStreaming) return;
     onSendMessage(input);
     setInput('');
     if (textareaRef.current) textareaRef.current.style.height = 'auto';
@@ -115,15 +116,24 @@ export function InputSection({ onSendMessage }: InputSectionProps) {
 
             <button
               onClick={() => handleSubmit()}
-              disabled={!input.trim()}
+              disabled={!input.trim() || isStreaming}
               className={cn(
-                "p-3 rounded-2xl transition-all duration-300 active:scale-90",
-                input.trim() 
+                "p-3 rounded-2xl transition-all duration-300 active:scale-90 relative overflow-hidden",
+                input.trim() && !isStreaming
                   ? "bg-accent text-white shadow-lg shadow-accent/30" 
                   : "bg-zinc-100 dark:bg-zinc-800 text-zinc-400 dark:text-zinc-600 cursor-not-allowed"
               )}
             >
-              <PaperPlaneTilt size={22} weight="bold" />
+              {isStreaming ? (
+                <motion.div
+                  animate={{ rotate: 360 }}
+                  transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
+                >
+                  <ArrowsCounterClockwise size={22} weight="bold" />
+                </motion.div>
+              ) : (
+                <PaperPlaneTilt size={22} weight="bold" />
+              )}
             </button>
           </div>
         </div>

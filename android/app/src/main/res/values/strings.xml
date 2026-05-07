@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Fronix</string>
+    <string name="title_activity_main">Fronix</string>
+    <string name="package_name">com.fronix.ai</string>
+    <string name="custom_url_scheme">com.fronix.ai</string>
+</resources>

@@ -17,6 +17,8 @@ interface SidebarProps {
   activeChatId: string | null;
   setActiveChatId: (id: string) => void;
   onCreateChat: () => void;
+  onDeleteChat: (id: string) => void;
+  onRenameChat: (id: string, newTitle: string) => void;
   onOpenSettings: () => void;
 }
 
@@ -27,6 +29,8 @@ export function Sidebar({
   activeChatId, 
   setActiveChatId, 
   onCreateChat,
+  onDeleteChat,
+  onRenameChat,
   onOpenSettings
 }: SidebarProps) {
   return (
@@ -79,10 +83,23 @@ export function Sidebar({
                 </span>
                 
                 <div className="hidden group-hover:flex items-center gap-1">
-                  <button className="p-1 hover:text-accent transition-colors">
+                  <button 
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      const newTitle = prompt('Enter new title:', chat.title);
+                      if (newTitle) onRenameChat(chat.id, newTitle);
+                    }}
+                    className="p-1 hover:text-accent transition-colors"
+                  >
                     <PencilSimple size={14} />
                   </button>
-                  <button className="p-1 hover:text-red-500 transition-colors">
+                  <button 
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (confirm('Delete this chat?')) onDeleteChat(chat.id);
+                    }}
+                    className="p-1 hover:text-red-500 transition-colors"
+                  >
                     <Trash size={14} />
                   </button>
                 </div>
