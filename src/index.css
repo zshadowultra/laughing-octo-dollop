@@ -1,0 +1,68 @@
+@import "tailwindcss";
+
+@theme {
+  --font-inter: "Inter", sans-serif;
+  --font-work-sans: "Work Sans", sans-serif;
+  
+  --color-light-background: #FFFFFF;
+  --color-light-sidebar: #F7F7F8;
+  --color-light-user-bubble: #F0F0F0;
+  --color-light-chat-surface: #FFFFFF;
+  --color-light-border: #E5E5E6;
+  --color-light-border-hover: #ECECEC;
+  --color-light-border-active: #E0E0E0;
+  --color-light-text: #18181B;
+  --color-light-text-subtle: #6B7280;
+
+  --color-dark-background: #121212;
+  --color-dark-sidebar: #1C1C1C;
+  --color-dark-user-bubble: #2C2C2C;
+  --color-dark-chat-surface: #121212;
+  --color-dark-border: #3A3A3A;
+  --color-dark-border-hover: #2A2A2A;
+  --color-dark-border-active: #303030;
+  --color-dark-text: #EAEAEA;
+  --color-dark-text-subtle: #A1A1AA;
+
+  --color-accent: #4F46E5;
+  --color-accent-hover: #4338CA;
+}
+
+@layer base {
+  body {
+    @apply font-inter antialiased;
+    background-color: var(--color-light-background);
+    color: var(--color-light-text);
+  }
+
+  .dark body {
+    background-color: var(--color-dark-background);
+    color: var(--color-dark-text);
+  }
+}
+
+/* Custom Utilities from index.html */
+.blinking-cursor {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background-color: currentColor;
+  border-radius: 50%;
+  animation: blink 1s infinite;
+}
+
+@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+.loading-spinner {
+  border: 2px solid rgba(0, 0, 0, 0.1);
+  border-left: 2px solid currentColor;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.dark .loading-spinner {
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-left: 2px solid currentColor;
+}
+
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
