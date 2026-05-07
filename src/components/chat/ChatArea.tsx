@@ -1,7 +1,7 @@
 import React from 'react';
 import type { Chat } from '../../App';
 import { Cpu, Sparkle, Lightning, Globe, Books } from '@phosphor-icons/react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '../../lib/utils';
 
 interface ChatAreaProps {
@@ -13,9 +13,9 @@ export function ChatArea({ chat }: ChatAreaProps) {
     return (
       <div className="flex-1 flex flex-col items-center justify-center p-8 text-center">
         <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5, type: 'spring' }}
+          initial={{ opacity: 0, scale: 0.9, y: 20 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          transition={{ duration: 0.5, type: 'spring', damping: 20, stiffness: 100 }}
           className="max-w-2xl w-full"
         >
           <div className="mb-12 inline-flex items-center justify-center w-24 h-24 rounded-[2.5rem] bg-accent/5 dark:bg-accent/10 text-accent shadow-2xl shadow-accent/20">
@@ -61,37 +61,45 @@ export function ChatArea({ chat }: ChatAreaProps) {
   }
 
   return (
-    <div className="flex-1 overflow-y-auto p-4 md:p-8 space-y-8 scroll-smooth">
-      <div className="max-w-3xl mx-auto w-full space-y-8 pb-32">
-        {chat.messages.map((message, index) => (
-          <motion.div
-            key={message.id}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: index * 0.05 }}
-            className={cn(
-              "flex group",
-              message.role === 'user' ? "justify-end" : "justify-start"
-            )}
-          >
-            <div className={cn(
-              "max-w-[85%] rounded-[2rem] p-5 md:p-6 shadow-sm",
-              message.role === 'user' 
-                ? "bg-accent text-white rounded-tr-none" 
-                : "bg-white dark:bg-zinc-800 border border-light-border dark:border-dark-border rounded-tl-none"
-            )}>
-              <div className="prose dark:prose-invert max-w-none text-[15px] leading-relaxed">
-                {message.content}
-              </div>
+    <div className="flex-1 overflow-y-auto p-4 md:p-8 space-y-8 scroll-smooth overflow-x-hidden">
+      <div className="max-w-3xl mx-auto w-full space-y-6 pb-32">
+        <AnimatePresence initial={false}>
+          {chat.messages.map((message) => (
+            <motion.div
+              key={message.id}
+              initial={{ opacity: 0, y: 20, scale: 0.95, originX: message.role === 'user' ? 1 : 0 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ 
+                type: 'spring', 
+                damping: 25, 
+                stiffness: 200,
+                duration: 0.3
+              }}
+              layout
+              className={cn(
+                "flex group mb-4",
+                message.role === 'user' ? "justify-end" : "justify-start"
+              )}
+            >
               <div className={cn(
-                "text-[10px] mt-2 opacity-50",
-                message.role === 'user' ? "text-right text-white/70" : "text-left"
+                "max-w-[85%] rounded-[2rem] p-5 md:p-6 shadow-lg transition-all duration-300",
+                message.role === 'user' 
+                  ? "bg-accent text-white rounded-tr-none shadow-accent/20" 
+                  : "bg-white dark:bg-zinc-800 border border-light-border dark:border-dark-border rounded-tl-none shadow-black/5"
               )}>
-                {new Date(message.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                <div className="prose dark:prose-invert max-w-none text-[15px] leading-relaxed font-medium">
+                  {message.content}
+                </div>
+                <div className={cn(
+                  "text-[10px] mt-2 font-bold uppercase tracking-widest opacity-40",
+                  message.role === 'user' ? "text-right text-white" : "text-left"
+                )}>
+                  {new Date(message.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                </div>
               </div>
-            </div>
-          </motion.div>
-        ))}
+            </motion.div>
+          ))}
+        </AnimatePresence>
       </div>
     </div>
   );

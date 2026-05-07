@@ -31,6 +31,7 @@ export function Sidebar({
 }: SidebarProps) {
   return (
     <motion.aside
+      role="complementary"
       initial={false}
       animate={{ 
         width: isOpen ? 280 : 0,
@@ -111,6 +112,7 @@ export function Sidebar({
       {/* Collapse button for mobile/desktop toggle */}
       <button
         onClick={() => setIsOpen(false)}
+        aria-label="CaretLeft"
         className="absolute top-1/2 -right-3 -translate-y-1/2 w-6 h-12 flex items-center justify-center bg-white dark:bg-zinc-800 border border-light-border dark:border-dark-border rounded-full shadow-sm z-30 hover:scale-110 transition-transform md:flex hidden"
       >
         <CaretLeft size={16} />

@@ -46,6 +46,7 @@ export function Header({
         {!isSidebarOpen && (
           <button 
             onClick={() => setIsSidebarOpen(true)}
+            aria-label="List"
             className="p-2 rounded-xl hover:bg-zinc-200/50 dark:hover:bg-zinc-800/30 transition-colors"
           >
             <List size={20} />
